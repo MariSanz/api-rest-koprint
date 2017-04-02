@@ -1,54 +1,43 @@
-// server.js
+var express         = require("express"),
+    app             = express(),
+    bodyParser      = require("body-parser"),
+    methodOverride  = require("method-override"),
+    mongoose        = require('mongoose'),
+    middleware = require('./middleware'),
+    service = require('./service'),
+    config = require('./config');
 
-// BASE SETUP
-// =============================================================================
+    
 
-// call the packages we need
-var express    = require('express');        // call express
-var app        = express();                 // define our app using express
-var bodyParser = require('body-parser');
-var User     = require('./models/user');
+mongoose.connect('mongodb://localhost/koprint', function(err, res) {  
+  if(err) {
+    console.log('ERROR: connecting to Database. ' + err);
+  }
+ });
+app.set('superSecret', config.secret); // secret variable
+
+// Middlewares
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(methodOverride());
+
+// Import Models and controllers
+var models     = require('./models/user')(app, mongoose);
 var UserCtrl = require('./controllers/userCtrl');
 
-// configure app to use bodyParser()
-// this will let us get the data from a POST
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-var port = process.env.PORT || 3000;        // set our port
-
-var mongoose   = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/koprint');
-
-
-
-// ROUTES FOR OUR API
-// =============================================================================
-var router = express.Router();              // get an instance of the express Router
-
-// middleware to use for all requests
-router.use(function(req, res, next) {
-    // do logging
-    console.log('Something is happening.');
-    next(); // make sure we go to the next routes and don't stop here
-});
+var router = express.Router();
 
 router.route('/users')  
   .get(UserCtrl.findAllUsers)
-  .post(UserCtrl.addUser);
+  .post(UserCtrl.addUser)
+  .put(UserCtrl.updateUser)
+  .delete(UserCtrl.deleteUser);
 
-// test route to make sure everything is working (accessed at GET http://localhost:3000/koprint)
-router.get('/', function(req, res) {
-    res.json({ message: 'hooray! welcome to our api!' });   
-});
+app.use('/koprint', router); 
 
-// more routes for our API will happen here
+//Conexion al servidor
+app.listen(3000, function() {
+    console.log("Node server running on http://localhost:3000");
+  });
 
-// REGISTER OUR ROUTES -------------------------------
-// all of our routes will be prefixed with /api
-app.use('/koprint', router);
 
-// START THE SERVER
-// =============================================================================
-app.listen(port);
-console.log('Magic happens on port ' + port);
