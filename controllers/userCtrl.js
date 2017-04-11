@@ -36,7 +36,7 @@ exports.addUser = function(req, res) {
 	  clave : 		req.body.clave
     });
 
-    User.save(function(err, user) {
+    user.save(function(err, user) {
         if(err) return res.status(500).send( err.message);
 
         User.findOne({ email: user.email }, function(err, user) {
@@ -64,7 +64,7 @@ exports.updateUser = function(req, res) {
           clave :       req.body.clave
         });
 
-       User.save(function(err, user) {
+       user.save(function(err, user) {
         if(err) return res.status(500).send( err.message);
 
         User.findOne({ email: user.email }, function(err, user) {

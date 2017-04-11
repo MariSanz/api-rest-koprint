@@ -1,5 +1,6 @@
 var express         = require("express"),
     app             = express(),
+    oauthServer     = require('express-oauth-server'), 
     bodyParser      = require("body-parser"),
     methodOverride  = require("method-override"),
     mongoose        = require('mongoose'),
@@ -7,7 +8,6 @@ var express         = require("express"),
     service = require('./service'),
     config = require('./config');
 
-    
 
 mongoose.connect('mongodb://localhost/koprint', function(err, res) {  
   if(err) {
@@ -25,6 +25,11 @@ app.use(methodOverride());
 var models     = require('./models/user')(app, mongoose);
 var UserCtrl = require('./controllers/userCtrl');
 
+var oauth = new oauthServer({
+  accessTokenLifetime: 0,
+  model: require('./models/oauthmodel')
+});
+
 var router = express.Router();
 
 router.route('/users')  
@@ -33,6 +38,9 @@ router.route('/users')
   .put(UserCtrl.updateUser)
   .delete(UserCtrl.deleteUser);
 
+app.all('/oauth/token', oauth.token());
+
+app.use('/koprint', oauth.authenticate())
 app.use('/koprint', router); 
 
 //Conexion al servidor
