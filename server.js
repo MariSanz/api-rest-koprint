@@ -22,11 +22,13 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 
 // Import Models and controllers
-var models     = require('./models/user')(app, mongoose);
+var userModel     = require('./models/user')(app, mongoose);
+var orderModel     = require('./models/order')(app, mongoose);
 var UserCtrl = require('./controllers/userCtrl');
+var OrderCtrl = require('./controllers/orderCtrl');
 
 var oauth = new oauthServer({
-  accessTokenLifetime: 0,
+ //accessTokenLifetime: 0,
   model: require('./models/oauthmodel')
 });
 
@@ -37,6 +39,9 @@ router.route('/users')
   .post(UserCtrl.addUser)
   .put(UserCtrl.updateUser)
   .delete(UserCtrl.deleteUser);
+
+router.route('/orders') 
+  .post(OrderCtrl.addOrder);
 
 app.all('/oauth/token', oauth.token());
 
