@@ -37,8 +37,13 @@ exports.addUser = function(req, res) {
     });
 
     user.save(function(err, user) {
-        if(err) return res.status(500).send( err.message);
-
+        if (err && err.name == 'ValidationError') {
+          return res.status(400).send(err.errors); 
+        }
+        if (err) {
+          return res.status(500).send(err.message);
+        }
+/*
         User.findOne({ email: user.email }, function(err, user) {
         	if(err) return res.status(500).send( err.message);
 
@@ -46,9 +51,9 @@ exports.addUser = function(req, res) {
 	        user.comparePassword(user.clave, function(err, isMatch) {
 	            if(err) return res.status(500).send( err.message);            
 	        });    
-        
-    });
-    res.status(200).jsonp(user);
+        });
+*/        
+      res.status(200).jsonp(user);
     });
 };
 

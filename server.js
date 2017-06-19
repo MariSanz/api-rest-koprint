@@ -32,11 +32,17 @@ var oauth = new oauthServer({
   model: require('./models/oauthmodel')
 });
 
+var routerAnonimo = express.Router();
 var router = express.Router();
+
+routerAnonimo.route('/users')
+  .post(UserCtrl.addUser);
+
+//primero hay que autenticar y luego indicar las rutas, importa el orden
+router.use(oauth.authenticate());
 
 router.route('/users')  
   .get(UserCtrl.findAllUsers)
-  .post(UserCtrl.addUser)
   .put(UserCtrl.updateUser)
   .delete(UserCtrl.deleteUser);
 
@@ -45,7 +51,8 @@ router.route('/orders')
 
 app.all('/oauth/token', oauth.token());
 
-app.use('/koprint', oauth.authenticate())
+//diferenciar rutas que se autentican y las que no
+app.use('/koprint', routerAnonimo);
 app.use('/koprint', router); 
 
 //Conexion al servidor

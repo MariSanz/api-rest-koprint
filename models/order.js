@@ -10,11 +10,11 @@ exports = module.exports = function(app, mongoose) {
           data : String,
           size : String
      }],
-    codTienda: { type: String, required : true },
-    fechaPedido:  { type: Date },
-    fechaEntrega:  { type: Date },
-    total:  { type : SchemaTypes.Double },
-    direccion:   { type: String }   
+    codTienda:      { type: String, required : true },
+    fechaPedido:    { type: Date },
+    fechaEntrega:   { type: Date },
+    total:          { type : Number },
+    direccion:      { type: String }   
   })
 
   OrderSchema.pre('save', function(next) {
@@ -29,6 +29,6 @@ exports = module.exports = function(app, mongoose) {
 
  
 
-    mongoose.model('User', UserSchema); 
+    mongoose.model('Order', OrderSchema); 
 
 };

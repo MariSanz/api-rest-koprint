@@ -1,6 +1,8 @@
+
 exports = module.exports = function(app, mongoose) {
 
   var mongoose = require('mongoose'),  
+    validateUniqueEmail = require('./validators').validateUniqueEmail;
     Schema   = mongoose.Schema,
     bcrypt = require('bcrypt'),
     SALT_WORK_FACTOR = 10;
@@ -11,7 +13,16 @@ exports = module.exports = function(app, mongoose) {
     telefono:  { type: String },
     direccion:   { type: String },
     codigoPostal:  { type: Number },  
-    email:  { type: String, required : true, index: { unique: true } },
+    email:  {
+      type: String,
+      required : true,
+      index: { unique: true },
+      validate: {
+          isAsync: true,
+          validator: validateUniqueEmail,
+          message: 'El email no es unico'
+        }
+      },
     clave : { type: String , required : true}
   })
 
