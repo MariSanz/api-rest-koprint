@@ -29,5 +29,8 @@
     "method-override": "^2.3.9",
     "moment": "^2.18.1",
     "mongoose": "^4.5.8"
+  },
+   "engines": {
+    "node": "4.1.1"
   }
 }
