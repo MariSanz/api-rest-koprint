@@ -47,13 +47,20 @@ exports = module.exports = function(app, mongoose) {
       });
   })
 
-  UserSchema.methods.comparePassword = function(candidatePassword, cb) {
+ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
       bcrypt.compare(candidatePassword, this.clave, function(err, isMatch) {
           if (err) return cb(err);
           cb(null, isMatch);
     });
   };
 
-    mongoose.model('User', UserSchema); 
+  var User = mongoose.model('User', UserSchema); 
+
+  function validateUniqueEmail(valorEmail, cb) {
+    User.findOne({ email: valorEmail }, function(err, user) {
+      cb(!user);
+    });
+  }
+
 
 };
