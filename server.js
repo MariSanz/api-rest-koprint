@@ -9,7 +9,7 @@ var express         = require("express"),
     config = require('./config');
 
 
-mongoose.connect('mongodb://localhost/koprint', function(err, res) {  
+mongoose.connect('mongodb://admin:admin123@ds139072.mlab.com:39072/koprint/koprint'', function(err, res) {  
   if(err) {
     console.log('ERROR: connecting to Database. ' + err);
   }
