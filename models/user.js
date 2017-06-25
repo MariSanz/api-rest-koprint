@@ -4,7 +4,7 @@ exports = module.exports = function(app, mongoose) {
   var mongoose = require('mongoose'),  
     validateUniqueEmail = require('./validators').validateUniqueEmail;
     Schema   = mongoose.Schema,
-    bcrypt = require('bcrypt'),
+    bcrypt = require('bcryptjs'),
     SALT_WORK_FACTOR = 10;
 
   var UserSchema  = new Schema({   
