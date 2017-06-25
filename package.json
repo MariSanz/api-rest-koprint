@@ -21,9 +21,11 @@
   },
   "homepage": "https://github.com/MariSanz/api-restful-koprint#readme",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "body-parser": "~1.0.1",
     "express": "^4.14.1",
     "express-oauth-server": "^2.0.0-b1",
+    "jwt-simple": "^0.5.1",
     "moment": "^2.18.1",
     "mongoose": "^4.5.8"
   }
